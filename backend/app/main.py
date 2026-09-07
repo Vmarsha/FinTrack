@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-
+from sqlalchemy import text
+from app.database.database import engine
 # Initialize the FastAPI app
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -24,3 +25,14 @@ async def root():
 async def health_check():
     """Health check endpoint for monitoring."""
     return {"status": "FinTrack backend is running"}
+@app.get("/database-test")
+def database_test():
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        return {"status": "Database connection successful"}
+    except Exception as e:
+        return {
+            "status": "Database connection failed",
+            "error": str(e)
+        }

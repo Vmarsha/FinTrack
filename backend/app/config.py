@@ -3,10 +3,11 @@ from typing import List
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "FinTrack API"
+    ALLOWED_ORIGINS: str = "http://localhost:5137"
     
-    # We store origins as a comma-separated string in .env 
-    # but convert it to a list for FastAPI to use.
-    ALLOWED_ORIGINS: str = "http://localhost:5173"
+    # Database Configuration
+    # Defaulting to a local SQLite file for Phase 2
+    DATABASE_URL: str = "sqlite:///./fintrack.db"
 
     @property
     def origins_list(self) -> List[str]:
@@ -15,5 +16,4 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-# Create a singleton instance to be used across the app
 settings = Settings()
